@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Payment form project",
   "scripts": {
-    "install-packages": "docker run -it -v \"$PWD\"/back-end:/usr/src/app -w /usr/src/app payment-form_back-end yarn install"
+    "install-packages-back-end": "docker run -it -v \"$PWD\"/back-end:/usr/src/app -w /usr/src/app payment-form_back-end yarn install",
+    "install-packages-front-end": "docker run -it -v \"$PWD\"/front-end:/usr/src/app -w /usr/src/app payment-form_front-end yarn install"
   },
   "author": "",
   "license": "MIT",
