@@ -1,0 +1,11 @@
+{
+  "name": "payment-form",
+  "version": "1.0.0",
+  "description": "Payment form project",
+  "scripts": {
+    "install-packages": "docker run -it -v \"$PWD\"/back-end:/usr/src/app -w /usr/src/app payment-form_back-end yarn install"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}
