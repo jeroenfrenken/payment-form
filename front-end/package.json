@@ -1,5 +1,5 @@
 {
-  "name": "front-end",
+  "name": "payment-form-front-end",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "swagger-codegen": "docker run -it --network=payment-form_payment-form-network -v \"$PWD\"/src/api:/usr/src/generated openapitools/openapi-generator-cli generate -i http://back-end:8000/api-docs/swagger.json -g typescript-axios -o /usr/src/generated"
+    "swagger-codegen": "docker run -it --network=payment-form_payment-form-network -v \"$PWD\"/src/api:/usr/src/generated openapitools/openapi-generator-cli generate -i http://back-end:8000/api-docs/swagger.json -g typescript-axios -o /usr/src/generated",
+    "install-packages": "docker run -it -v \"$PWD\":/usr/src/app -w /usr/src/app payment-form_front-end yarn install"
   },
   "eslintConfig": {
     "extends": "react-app"

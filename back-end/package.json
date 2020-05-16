@@ -1,19 +1,17 @@
 {
-  "name": "@tsed/mongoose-example",
+  "name": "payment-form",
   "version": "1.0.0",
-  "description": "Here an example project with Mongoose and Ts.ED framework.",
+  "private": true,
+  "description": "Payment form school project",
   "scripts": {
-    "clean": "rimraf '{src,test}/**/*.{js,js.map}'",
-    "build": "yarn tsc",
     "test": "yarn clean && yarn test:lint && yarn test:coverage",
     "test:unit": "cross-env NODE_ENV=test mocha",
     "test:coverage": "cross-env NODE_ENV=test nyc mocha",
     "test:lint": "tslint --project tsconfig.json",
     "test:lint:fix": "tslint --project tsconfig.json --fix",
-    "start": "nodemon --watch \"src/**/*.ts\" --ignore \"node_modules/**/*\" --exec ts-node src/index.ts"
+    "start": "nodemon --watch \"src/**/*.ts\" --ignore \"node_modules/**/*\" --exec ts-node src/index.ts",
+    "install-packages": "docker run -it -v \"$PWD\":/usr/src/app -w /usr/src/app payment-form_back-end yarn install"
   },
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "@tsed/common": "5.53.0",
     "@tsed/core": "5.53.0",
