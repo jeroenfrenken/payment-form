@@ -4,7 +4,8 @@
   "description": "Payment form project",
   "scripts": {
     "install-packages-back-end": "docker run -it -v \"$PWD\"/back-end:/usr/src/app -w /usr/src/app payment-form_back-end yarn install",
-    "install-packages-front-end": "docker run -it -v \"$PWD\"/front-end:/usr/src/app -w /usr/src/app payment-form_front-end yarn install"
+    "install-packages-front-end": "docker run -it -v \"$PWD\"/front-end:/usr/src/app -w /usr/src/app payment-form_front-end yarn install",
+    "swagger-codegen": "docker run -it --network=payment-form_payment-form-network -v \"$PWD\"/front-end/src/service/api:/usr/src/generated swaggerapi/swagger-codegen-cli generate -i http://back-end:8000/api-docs/swagger.json -l typescript-fetch -o /usr/src/generated"
   },
   "author": "",
   "license": "MIT",
