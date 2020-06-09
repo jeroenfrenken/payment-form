@@ -19,4 +19,130 @@ import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
+/**
+ * 
+ * @export
+ * @interface AuthenticateDTO
+ */
+export interface AuthenticateDTO {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthenticateDTO
+     */
+    email?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthenticateDTO
+     */
+    password?: string;
+}
+
+/**
+ * AuthenticationControllerApi - axios parameter creator
+ * @export
+ */
+export const AuthenticationControllerApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {AuthenticateDTO} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authenticationControllerAuthenticate: async (body: AuthenticateDTO, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling authenticationControllerAuthenticate.');
+            }
+            const localVarPath = `/rest/authentication/authenticate`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AuthenticationControllerApi - functional programming interface
+ * @export
+ */
+export const AuthenticationControllerApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {AuthenticateDTO} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authenticationControllerAuthenticate(body: AuthenticateDTO, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await AuthenticationControllerApiAxiosParamCreator(configuration).authenticationControllerAuthenticate(body, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+    }
+};
+
+/**
+ * AuthenticationControllerApi - factory interface
+ * @export
+ */
+export const AuthenticationControllerApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    return {
+        /**
+         * 
+         * @param {AuthenticateDTO} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authenticationControllerAuthenticate(body: AuthenticateDTO, options?: any): AxiosPromise<void> {
+            return AuthenticationControllerApiFp(configuration).authenticationControllerAuthenticate(body, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AuthenticationControllerApi - object-oriented interface
+ * @export
+ * @class AuthenticationControllerApi
+ * @extends {BaseAPI}
+ */
+export class AuthenticationControllerApi extends BaseAPI {
+    /**
+     * 
+     * @param {AuthenticateDTO} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationControllerApi
+     */
+    public authenticationControllerAuthenticate(body: AuthenticateDTO, options?: any) {
+        return AuthenticationControllerApiFp(this.configuration).authenticationControllerAuthenticate(body, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 

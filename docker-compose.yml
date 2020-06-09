@@ -30,7 +30,7 @@ services:
     container_name: payment-form-back-end
     entrypoint: ['yarn', 'start']
     volumes:
-      - ./back-end:/usr/src/app
+      - ./back-end:/usr/src/app:cached
     ports:
       - 8000:8000
     depends_on:
@@ -50,7 +50,7 @@ services:
     container_name: payment-form-front-end
     entrypoint: ['yarn', 'start']
     volumes:
-      - ./front-end:/usr/src/app
+      - ./front-end:/usr/src/app:cached
     depends_on:
       - back-end
     networks:

@@ -13,14 +13,13 @@
     "axios": "^0.19.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router": "^5.2.0",
     "react-scripts": "3.4.1",
     "typescript": "~3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "swagger-codegen": "docker run -it --network=payment-form_payment-form-network -v \"$PWD\"/src/api:/usr/src/generated openapitools/openapi-generator-cli generate -i http://back-end:8000/api-docs/swagger.json -g typescript-axios -o /usr/src/generated",
     "install-packages": "docker run -it -v \"$PWD\":/usr/src/app -w /usr/src/app payment-form_front-end yarn install"
   },
