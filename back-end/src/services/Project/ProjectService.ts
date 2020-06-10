@@ -5,7 +5,7 @@ import { Project } from '../../models/Project/Project';
 
 export class ProjectService {
     constructor(
-        @Inject(Project) private userModel: MongooseModel<Project>
+        @Inject(Project) private projectModel: MongooseModel<Project>
     ) {
     }
 
