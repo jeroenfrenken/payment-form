@@ -1,8 +1,13 @@
-import { Property, Required } from '@tsed/common';
+import { Required } from '@tsed/common';
 import { Model, ObjectID, PreHook, Unique } from '@tsed/mongoose';
 import { hash, compare } from 'bcrypt';
+import { isNull } from 'lodash';
 
-@Model()
+@Model({
+    schemaOptions: {
+        timestamps: true
+    }
+})
 export class User {
     @Unique()
     @ObjectID('id')
@@ -24,9 +29,19 @@ export class User {
     @Required()
     createdAt: Date;
 
+    @PreHook("validation")
+    static preValidation(user: User, next) {
+        if (isNull(user.createdAt)) {
+            user.createdAt = new Date();
+        }
+
+        next();
+    }
+
     @PreHook("save")
     static async preSave(user: User, next) {
-        if (user.password !== null) {
+        // TODO: check with update
+        if (!isNull(user.password)) {
             try {
                 user.password = await hash(user.password, 10);
             } catch (e) {

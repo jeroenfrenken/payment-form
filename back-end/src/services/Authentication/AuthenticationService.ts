@@ -1,23 +1,34 @@
-import { Inject } from '@tsed/common';
+import { Inject, Service } from '@tsed/common';
 import { MongooseModel } from '@tsed/mongoose';
 import { AuthenticateDTO } from '../../dto/Authentication/AuthenticateDTO';
 import { RegisterDTO } from '../../dto/Authentication/RegisterDTO';
 import { User } from '../../models/Authentication/User';
 import { UserToken } from '../../models/Authentication/UserToken';
-import { generateToken } from '../../Util/GenerateUtil';
 
+@Service()
 export class AuthenticationService {
     constructor(
-        @Inject(User) private userModel: MongooseModel<User>,
-        @Inject(UserToken) private userToken: MongooseModel<UserToken>
-    ) {
+        @Inject(User) private readonly userModel: MongooseModel<User>,
+        @Inject(UserToken) private readonly userToken: MongooseModel<UserToken>
+    ) {}
+
+    public async getUserByToken(token: string): Promise<User|null> {
+        try {
+            const userToken: UserToken = await this.userToken.findOne({
+                token,
+            }).populate('user').exec();
+
+            return userToken?.user as User;
+        } catch (e) {
+            return null;
+        }
     }
 
     public async authenticate(user: AuthenticateDTO): Promise<UserToken|null> {
         try {
             const account: User = await this.userModel.findOne({
                 email: user.email
-            })
+            }).exec();
 
             if (await account.verifyPassword(user.password)) {
                 return await new this.userToken({
@@ -39,8 +50,7 @@ export class AuthenticationService {
 
         try {
             return await new this.userModel({
-                ...user,
-                createdAt: new Date()
+                ...user
             } as User).save();
         } catch (e) {
             // Handling

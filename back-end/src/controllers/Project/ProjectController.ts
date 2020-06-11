@@ -1,5 +1,19 @@
-import { BodyParams, Controller, Delete, Get, Post, Put, Required } from '@tsed/common';
+import {
+    Authenticated,
+    BodyParams,
+    Controller,
+    Delete,
+    Get,
+    PathParams,
+    Post,
+    Put,
+    Req,
+    Required,
+    UseAuth
+} from '@tsed/common';
+import { CustomAuth } from '../../decorators/CustomAuth';
 import { ProjectDTO } from '../../dto/Project/ProjectDTO';
+import { AuthenticationMiddleware, RequestWithUser } from '../../middlewares/AuthenticationMiddleware';
 import { ProjectService } from '../../services/Project/ProjectService';
 
 @Controller("/project")
@@ -10,44 +24,63 @@ export class ProjectController {
     }
 
     @Post("")
+    @CustomAuth({ role: 'user' })
     async createProject(
+        @Req() request: RequestWithUser,
         @Required() @BodyParams() projectDto: ProjectDTO
     ) {
-        try {
-            const project = await this.projectService.createProject(projectDto);
-        } catch (e) {
+        const project = await this.projectService.createProject(projectDto, request.user);
 
+        return {
+            err: project === null,
+            project
         }
-
     }
 
     @Get("")
-    async getAll() {
-
-    }
-
-    @Get("/{id}")
-    async get() {
-
-    }
-
-    @Put("/{id}")
-    async update(
-        @Required() @BodyParams() projectDto: ProjectDTO
+    @CustomAuth({ role: 'user' })
+    async getAll(
+        @Req() request: RequestWithUser
     ) {
-        try {
-            const project = await this.projectService.updateProject(projectDto);
-        } catch (e) {
+        const projects = await this.projectService.findAllByUser(request.user);
 
+        return {
+            err: false,
+            projects: projects.length > 0 ? projects : []
         }
     }
 
-    @Delete("/{id}")
-    async delete() {
-        try {
-            const delProject = await this.projectService.deleteProject("test");
-        } catch (e) {
+    @Get("/:id")
+    @CustomAuth({ role: 'user' })
+    async get(
+        @Req() request: RequestWithUser,
+        @Required() @PathParams("id") id: string
+    ) {
 
+    }
+
+    @Put("/:id")
+    @CustomAuth({ role: 'user' })
+    async update(
+        @Req() request: RequestWithUser,
+        @Required() @PathParams("id") id: string,
+        @Required() @BodyParams() projectDto: ProjectDTO
+    ) {
+       const project = await this.projectService.updateProject(projectDto, request.user);
+
+        return {
+            err: project === null,
+            project
+        }
+    }
+
+    @Delete("/:id")
+    async delete(
+        @Req() request: RequestWithUser,
+        @Required() @PathParams("id") id: string
+    ) {
+        return {
+            err: !await this.projectService.deleteProject(id, request.user)
         }
     }
 }

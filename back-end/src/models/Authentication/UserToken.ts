@@ -1,9 +1,14 @@
 import { Required } from '@tsed/common';
 import { Model, ObjectID, PreHook, Ref } from '@tsed/mongoose';
+import { isNull } from 'lodash';
 import { generateToken } from '../../Util/GenerateUtil';
 import { User } from './User';
 
-@Model()
+@Model({
+    schemaOptions: {
+        timestamps: true
+    }
+})
 export class UserToken {
     @ObjectID('id')
     _id: string;
@@ -23,16 +28,15 @@ export class UserToken {
 
     @PreHook("validate")
     static preValidate(userToken: UserToken, next) {
-        console.log(userToken.token);
-        if (userToken.token === undefined) {
+        if (isNull(userToken.token)) {
             userToken.token = generateToken()
         }
 
-        if (userToken.lastAccessAt === undefined) {
+        if (isNull(userToken.lastAccessAt)) {
             userToken.lastAccessAt = new Date();
         }
 
-        if (userToken.createdAt === undefined) {
+        if (isNull(userToken.createdAt)) {
             userToken.createdAt = new Date();
         }
 
